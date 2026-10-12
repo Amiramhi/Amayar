@@ -197,17 +197,19 @@ async function load(){
   if(f)GID=f.id;else{var c=await gh('/gists',{method:'POST',body:JSON.stringify({description:'amayar-data',public:false,files:{'amayar.json':{content:JSON.stringify({user:null,old:null,comments:[]})}}})});GID=c.id}
   sv('amy_gid',GID)}
  var g=await gh('/gists/'+GID),f2=g.files[FILE];
- D=JSON.parse(f2.truncated?await (await fetch(f2.raw_url)).text():f2.content);D.comments=D.comments||[]}
+ D=JSON.parse(f2.truncated?await (await fetch(f2.raw_url)).text():f2.content);D.comments=D.comments||[];D.users=D.users||{};
+ if(D.user){D.users[D.user.e]={p:D.user.p,n:D.user.n,t:D.user.t,old:null};delete D.user;delete D.old}}
 async function save(){await gh('/gists/'+GID,{method:'PATCH',body:JSON.stringify({files:{'amayar.json':{content:JSON.stringify(D)}}})})}
-window.api={multi:false,
- hasAccount:async function(){return !!D.user},
- register:async function(e,p){await load();if(D.user)throw new Error('An account already exists. Sign in.');D.user={e:e,p:p,n:'',t:''};await save();sv('amy_in',1)},
- login:async function(e,p){await load();if(D.user&&D.user.e===e&&D.user.p===p){sv('amy_in',1);return true}return false},
+function cur(){var c=ld('amy_in');return typeof c==='string'?c:null}
+window.api={multi:true,
+ hasAccount:async function(){return Object.keys(D.users).length>0},
+ register:async function(e,p){await load();if(D.users[e])throw new Error('This email already has an account. Sign in instead.');D.users[e]={p:p,n:'',t:'',old:null};await save();sv('amy_in',e)},
+ login:async function(e,p){await load();var u=D.users[e];if(u&&u.p===p){sv('amy_in',e);return true}return false},
  logout:function(){sv('amy_in',null)},
- session:async function(){return !!(ld('amy_in')&&D.user)},
- getProfile:async function(){await load();return D.user},
- saveProfile:async function(nu,old){await load();D.old={d:{e:old.e,n:old.n,t:old.t},ts:Date.now()};D.user=nu;await save()},
- purge:async function(){if(D.old&&Date.now()-D.old.ts>864e5){D.old=null;await save()}},
+ session:async function(){var c=cur();return !!(c&&D.users[c])},
+ getProfile:async function(){await load();var c=cur(),u=c&&D.users[c];return u?{e:c,p:u.p,n:u.n,t:u.t}:null},
+ saveProfile:async function(nu,old){await load();var u=D.users[cur()];u.old={d:{n:old.n,t:old.t},ts:Date.now()};u.n=nu.n;u.t=nu.t;u.p=nu.p;await save()},
+ purge:async function(){var ch=false;Object.keys(D.users).forEach(function(k){var o=D.users[k].old;if(o&&Date.now()-o.ts>864e5){D.users[k].old=null;ch=true}});if(ch)await save()},
  addComment:async function(t){await load();D.comments.push({t:t,d:new Date().toISOString()});await save()},
  listComments:async function(){await load();return D.comments.slice().sort(function(a,b){return b.d>a.d?1:-1})},
  owner:function(){return true}};
@@ -217,7 +219,7 @@ function tokenScreen(msg){
  $('#er').textContent=msg||'';
  $('#tf').onsubmit=function(ev){ev.preventDefault();T=$('#tk').value.trim();sv('amy_tok',T);GID=null;sv('amy_gid',null);init(true)}}
 async function init(fresh){if(!T){tokenScreen();return}
- try{await load();if(fresh&&D.user)sv('amy_in',1);boot()}catch(e){tokenScreen(e.message||'Could not reach GitHub.')}}
+ try{await load();boot()}catch(e){tokenScreen(e.message||'Could not reach GitHub.')}}
 init();
 })();
 </script>
