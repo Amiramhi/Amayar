@@ -215,9 +215,9 @@ function tokenScreen(msg){
  $('#app').hidden=true;$('#auth').hidden=false;
  $('#auth').innerHTML='<div class="box">'+logo('lg0',200)+'<h2>Connect GitHub</h2><p style="font-size:13px;text-align:left">Paste a GitHub token that only has the <b>gist</b> permission. It stays in this browser and is never put in the site files.</p><form id="tf"><input id="tk" type="password" placeholder="ghp_..." required autocomplete="off"><div class="err" id="er"></div><button class="btn" style="width:100%">Connect</button></form></div>';
  $('#er').textContent=msg||'';
- $('#tf').onsubmit=function(ev){ev.preventDefault();T=$('#tk').value.trim();sv('amy_tok',T);GID=null;sv('amy_gid',null);init()}}
-async function init(){if(!T){tokenScreen();return}
- try{await load();boot()}catch(e){tokenScreen(e.message||'Could not reach GitHub.')}}
+ $('#tf').onsubmit=function(ev){ev.preventDefault();T=$('#tk').value.trim();sv('amy_tok',T);GID=null;sv('amy_gid',null);init(true)}}
+async function init(fresh){if(!T){tokenScreen();return}
+ try{await load();if(fresh&&D.user)sv('amy_in',1);boot()}catch(e){tokenScreen(e.message||'Could not reach GitHub.')}}
 init();
 })();
 </script>
