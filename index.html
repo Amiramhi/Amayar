@@ -124,6 +124,7 @@ function go(v,a,b){
  else if(v==='auth')$('#main').innerHTML='<h1>Product health &amp; authenticity</h1><p>Amayar points you to established shops. Before buying any product, check these:</p><ul><li>Batch number, production date and expiry date are printed on the package.</li><li>The label is complete, with a health-authority licence where required.</li><li>The seller is verified. A price far below market is a warning sign.</li><li>The seal is intact when the package arrives.</li></ul><p style="color:var(--mut)">Sample text, ready for you to expand.</p>';
  else if(v==='profile')profile(false);
  else if(v==='comments')showComments();
+ else if(v==='users')showUsers();
  else if(v==='item'){var x=a;$('#main').innerHTML='<h1>'+esc(x.n)+'</h1><div class="grid">'+card(x)+'</div><h3>Similar products</h3><div class="grid">'+P.filter(function(y){return y.t===x.t&&y!==x}).slice(0,10).map(card).join('')+'</div>'}
 }
 async function profile(edit,msg){
@@ -146,9 +147,10 @@ async function profile(edit,msg){
     profile(false,'Saved. The previous version is kept for 24 hours, then deleted.')}catch(x){$('#er').textContent=x.message||'Could not save.'}}
  }
 }
+async function showUsers(){var r=api.listUsers?await api.listUsers():[],h='<h1>Registered users</h1>';r.forEach(function(u){h+='<div class="row"><b>'+esc(u.e)+'</b><span>'+esc(u.n||'—')+' · '+esc(u.t||'—')+'</span></div>'});$('#main').innerHTML=r.length?h:h+'<p>No users yet.</p>'}
 async function showComments(){
  var r=await api.listComments(),h='<h1>Received feedback</h1>';
- r.forEach(function(c){h+='<div class="row">'+esc(c.t)+'</div>'});
+ r.forEach(function(c){h+='<div class="row"><span>'+esc(c.t)+'</span><small style="color:var(--mut)">'+esc(c.e||'guest')+'</small></div>'});
  $('#main').innerHTML=r.length?h:h+'<p>No feedback yet.</p>'}
 
 // ---------- chrome ----------
@@ -156,7 +158,7 @@ function closeAll(){document.querySelectorAll('.sub.o,.dd.o').forEach(function(e
 var nav='<div><button data-v="home">Home</button></div><div><button data-v="support">Support</button></div>';
 Object.keys(CATS).forEach(function(c){nav+='<div><button data-t="1">'+c+' ▾</button><div class="sub">'+CATS[c].b.map(function(b){return '<button data-c="'+esc(c)+'" data-b="'+esc(b)+'">'+esc(b)+'</button>'}).join('')+'<button data-c="'+c+'">All '+c+'</button></div></div>'});
 $('#nav').innerHTML=nav;
-function menu(){$('#dd').innerHTML='<button data-v="home">Home</button><button data-v="support">Support</button>'+Object.keys(CATS).map(function(c){return '<button data-c="'+c+'">'+c+'</button>'}).join('')+(api.owner()?'<button data-v="comments">Received feedback</button>':'')+'<hr><button id="lo">Sign out</button>'}
+function menu(){$('#dd').innerHTML='<button data-v="home">Home</button><button data-v="support">Support</button>'+Object.keys(CATS).map(function(c){return '<button data-c="'+c+'">'+c+'</button>'}).join('')+(api.owner()?'<button data-v="users">Registered users</button><button data-v="comments">Received feedback</button>':'')+'<hr><button id="lo">Sign out</button>'}
 document.addEventListener('click',function(ev){
  var t=ev.target.closest('button');
  if(!ev.target.closest('.sw'))$('#sg').hidden=true;
@@ -200,6 +202,7 @@ async function load(){
  D=JSON.parse(f2.truncated?await (await fetch(f2.raw_url)).text():f2.content);D.comments=D.comments||[];D.users=D.users||{};
  if(D.user){D.users[D.user.e]={p:D.user.p,n:D.user.n,t:D.user.t,old:null};delete D.user;delete D.old}}
 async function save(){await gh('/gists/'+GID,{method:'PATCH',body:JSON.stringify({files:{'amayar.json':{content:JSON.stringify(D)}}})})}
+var OWNER='0koloamir0@gmail.com';
 function cur(){var c=ld('amy_in');return typeof c==='string'?c:null}
 window.api={multi:true,
  hasAccount:async function(){return Object.keys(D.users).length>0},
@@ -210,9 +213,10 @@ window.api={multi:true,
  getProfile:async function(){await load();var c=cur(),u=c&&D.users[c];return u?{e:c,p:u.p,n:u.n,t:u.t}:null},
  saveProfile:async function(nu,old){await load();var u=D.users[cur()];u.old={d:{n:old.n,t:old.t},ts:Date.now()};u.n=nu.n;u.t=nu.t;u.p=nu.p;await save()},
  purge:async function(){var ch=false;Object.keys(D.users).forEach(function(k){var o=D.users[k].old;if(o&&Date.now()-o.ts>864e5){D.users[k].old=null;ch=true}});if(ch)await save()},
- addComment:async function(t){await load();D.comments.push({t:t,d:new Date().toISOString()});await save()},
- listComments:async function(){await load();return D.comments.slice().sort(function(a,b){return b.d>a.d?1:-1})},
- owner:function(){return true}};
+ addComment:async function(t){await load();D.comments.push({t:t,d:new Date().toISOString(),e:cur()||''});await save()},
+ listComments:async function(){await load();if(!api.owner())return [];return D.comments.slice().sort(function(a,b){return b.d>a.d?1:-1})},
+ listUsers:async function(){await load();if(!api.owner())return [];return Object.keys(D.users).map(function(k){var u=D.users[k];return {e:k,n:u.n,t:u.t}})},
+ owner:function(){return cur()===OWNER}};
 function tokenScreen(msg){
  $('#app').hidden=true;$('#auth').hidden=false;
  $('#auth').innerHTML='<div class="box">'+logo('lg0',200)+'<h2>Connect GitHub</h2><p style="font-size:13px;text-align:left">Paste a GitHub token that only has the <b>gist</b> permission. It stays in this browser and is never put in the site files.</p><form id="tf"><input id="tk" type="password" placeholder="ghp_..." required autocomplete="off"><div class="err" id="er"></div><button class="btn" style="width:100%">Connect</button></form></div>';
