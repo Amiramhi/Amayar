@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amayar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f2ea;--card:#fbfaf5;--ink:#3b3f2c;--mut:#7b7f68;--ol:#a3ae7e;--olt:#66744a;--ln:#dcdac8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#22251a;--card:#2b2f21;--ink:#e6e6d6;--mut:#a3a78e;--ln:#43472f}}
+*{box-sizing:border-box;min-width:0}[hidden]{display:none!important}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 Inter,system-ui,sans-serif;overflow-wrap:anywhere}
+button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.btn{background:var(--ol);color:#2b3020;border:0;border-radius:8px;padding:9px 18px}
+.btn.alt{background:transparent;color:var(--olt);border:1px solid var(--ol)}
+input,textarea{width:100%;padding:9px 12px;border:1px solid var(--ln);border-radius:8px;background:var(--card);margin:4px 0 12px}
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:24px;width:100%;max-width:380px;text-align:center}
+.box svg{max-width:100%;height:auto}.box form{text-align:left}.box h2{font-weight:500;margin:6px 0 14px}
+.err{color:#a33;font-size:13px;min-height:20px}.lk{background:none;border:0;color:var(--olt);margin-top:10px}
+header{display:flex;align-items:center;gap:6px 10px;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:5}
+header>svg{flex:0 0 auto;width:100px;height:auto}
+.ib{background:none;border:0;font-size:22px;padding:4px 8px;color:var(--olt)}
+nav{display:flex;gap:2px;flex:1}nav>div{position:relative}
+nav button,.dd button{background:none;border:0;padding:6px 10px;border-radius:6px;white-space:nowrap}
+nav button:hover,.dd button:hover{background:var(--bg)}
+.sub{display:none;position:absolute;top:100%;left:0;background:var(--card);border:1px solid var(--ln);border-radius:8px;min-width:160px;z-index:9;padding:4px}
+.sub.o{display:block}.sub button,.dd button{display:block;width:100%;text-align:left}
+.dw{position:relative;margin-left:auto}
+.dd{position:absolute;top:100%;right:0;background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:6px;width:220px;max-width:calc(100vw - 28px);display:none;z-index:9}
+.dd.o{display:block}.dd button{white-space:normal}.dd hr{border:0;border-top:1px solid var(--ln)}
+.sw{position:relative;flex:0 1 260px}.sw input{margin:0}
+.sg{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--ln);border-radius:8px;z-index:9}
+.sg div{padding:7px 12px;cursor:pointer}.sg div:hover{background:var(--bg)}
+main{max-width:1000px;margin:0 auto;padding:20px 14px;min-height:60vh}
+h1{font-weight:500;font-size:24px;margin:0 0 16px}h3{font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.p{background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:12px;text-align:center;font-size:14px}
+.p .im{font-size:44px;background:var(--bg);border-radius:8px;padding:10px 0;margin-bottom:6px}
+.p small{color:var(--mut);display:block}.p a{color:var(--olt);text-decoration:none}
+.ch{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.ch button,.pg button{border:1px solid var(--ln);background:var(--card);border-radius:16px;padding:3px 12px}
+.ch .on,.pg .on{background:var(--ol);color:#2b3020}
+.pg{display:flex;gap:6px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln);align-items:center;flex-wrap:wrap}
+.pw{display:flex;gap:6px;align-items:center}
+footer{background:var(--card);border-top:1px solid var(--ln);padding:22px 14px}
+.fw{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px}
+.fw h3{margin:0 0 8px}
+.fs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fs button{border:1px dashed var(--ln);background:none;border-radius:8px;padding:8px;min-height:40px;color:var(--olt)}.fs button:empty{pointer-events:none}
+footer a,.row a{color:var(--olt)}.ok{color:var(--olt)}
+@media(max-width:760px){nav{display:none}header>svg{flex:1 1 auto;width:auto;max-width:130px}.sw{order:9;flex:1 1 100%}.dw{margin-left:0}header{flex-wrap:wrap}h1{font-size:20px}main{padding:16px 12px}.grid{gap:10px}}
+@media(max-width:360px){.grid{grid-template-columns:1fr 1fr}.p{padding:8px}.fs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="auth"></div>
+<div id="app" hidden>
+<header>
+ <button class="ib" id="pf" aria-label="Profile">👤</button>
+ <span id="hl"></span>
+ <nav id="nav"></nav>
+ <div class="sw"><input id="q" placeholder="Search products..." autocomplete="off"><div class="sg" id="sg" hidden></div></div>
+ <div class="dw"><button class="ib" id="dots" aria-label="Menu">⋮</button><div class="dd" id="dd"></div></div>
+</header>
+<main id="main"></main>
+<footer>
+ <div class="fw">
+  <div><h3>Support &amp; contact</h3>
+   <div>Phone: <a href="tel:09143748115">09143748115</a></div>
+   <div>Instagram: <a href="https://instagram.com/amir.me.1229" target="_blank" rel="noopener">amir.me.1229</a></div>
+   <div>Telegram: <a href="https://t.me/ballerinaamir" target="_blank" rel="noopener">@ballerinaamir</a></div></div>
+  <div><h3>What we offer</h3><div class="fs" id="fs"></div></div>
+  <div><h3>Your feedback</h3>
+   <textarea id="cm" rows="3" placeholder="Tell us about the site (private, only the owner sees it)"></textarea>
+   <button class="btn" id="cs">Send feedback</button> <span class="ok" id="cok"></span></div>
+ </div>
+</footer>
+</div>
+
+<script>
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function logo(id,w){return '<svg width="'+w+'" viewBox="0 0 260 80" role="img" aria-label="Amayar"><defs><pattern id="'+id+'" width="70" height="44" patternUnits="userSpaceOnUse"><rect width="70" height="44" fill="#1f3a78"/><path d="M0 22Q17 0 35 22T70 22" stroke="#f1c84b" stroke-width="5" fill="none"/><path d="M0 36Q17 16 35 36T70 36" stroke="#7fb0e6" stroke-width="4" fill="none"/><circle cx="52" cy="9" r="6" fill="#f6e08a"/><circle cx="14" cy="8" r="3" fill="#f6e08a"/></pattern></defs><text x="130" y="58" text-anchor="middle" font-size="58" font-weight="700" font-family="Inter,system-ui,sans-serif" fill="url(#'+id+')" stroke="#1f3a78" stroke-width="1">Amayar</text></svg>'}
+$('#hl').outerHTML=logo('lg2',100);
+
+// ---------- auth ----------
+async function showAuth(reg){
+ if(reg===undefined)reg=!(await api.hasAccount());
+ $('#app').hidden=true;$('#auth').hidden=false;
+ $('#auth').innerHTML='<div class="box">'+logo('lg1',230)+'<h2>Welcome</h2><form id="af"><label>Email</label><input id="e" type="email" required autocomplete="email"><label>Password</label><input id="p" type="password" required minlength="6" autocomplete="'+(reg?'new':'current')+'-password"><div class="err" id="er"></div><button class="btn" style="width:100%">'+(reg?'Sign up':'Sign in')+'</button></form>'+(api.multi?'<button class="lk" id="tg">'+(reg?'Already have an account? Sign in':'New here? Create an account')+'</button>':'')+'</div>';
+ if(api.multi)$('#tg').onclick=function(){showAuth(!reg)};
+ $('#af').onsubmit=async function(ev){ev.preventDefault();
+  var e=$('#e').value.trim().toLowerCase(),p=$('#p').value;
+  try{if(reg)await api.register(e,p);else if(!(await api.login(e,p))){$('#er').textContent='Wrong email or password.';return}
+   start()}catch(x){$('#er').textContent=x.message||'Something went wrong.'}}
+}
+async function start(){await api.purge();$('#auth').hidden=true;$('#app').hidden=false;menu();go('home')}
+
+// ---------- data ----------
+var CATS={'Shampoo':{e:'🧴',b:['Pantene','Head & Shoulders','Clear','Sunsilk'],t:['Anti-hair-fall','Anti-dandruff','Repair']},
+'Serum':{e:'💧',b:['The Ordinary','Vichy','Garnier','Paula\'s Choice'],t:['Vitamin C','Hyaluronic acid','Niacinamide']},
+'Makeup':{e:'💄',b:['Maybelline','L\'Oréal','Essence','NYX'],t:['Lipstick','Mascara','Foundation']},
+'Skincare':{e:'🧼',b:['Bioderma','Nivea','CeraVe','Cetaphil'],t:['Moisturizer','Sunscreen','Cleanser']}};
+var P=[],i=0;
+Object.keys(CATS).forEach(function(c){CATS[c].b.forEach(function(b){CATS[c].t.forEach(function(t){i++;
+ P.push({n:b+' '+t,c:c,b:b,t:t,e:CATS[c].e,pr:12+((i*37)%90)*0.5,q:b+' '+t})})})});
+function card(x){var q=encodeURIComponent(x.q);return '<div class="p"><div class="im">'+x.e+'</div><b>'+esc(x.n)+'</b><small>'+x.c+'</small><small>Sample price $'+x.pr.toFixed(2)+'</small><a href="https://www.digikala.com/search/?q='+q+'" target="_blank" rel="noopener">Digikala</a> · <a href="https://www.khanoumi.com/search?q='+q+'" target="_blank" rel="noopener">Khanoumi</a></div>'}
+function list(title,arr,pg,chips){
+ var pages=Math.ceil(arr.length/10)||1;pg=Math.min(pg,pages);
+ var h='<h1>'+esc(title)+'</h1>'+(chips||'')+'<div class="grid">'+arr.slice((pg-1)*10,pg*10).map(card).join('')+'</div><div class="pg">';
+ for(var k=1;k<=pages;k++)h+='<button class="'+(k==pg?'on':'')+'" data-pg="'+k+'">'+k+'</button>';
+ $('#main').innerHTML=h+'</div>';
+ document.querySelectorAll('[data-pg]').forEach(function(b){b.onclick=function(){list(title,arr,+b.dataset.pg,chips);window.scrollTo(0,0)}})
+}
+
+// ---------- views ----------
+function go(v,a,b){
+ closeAll();window.scrollTo(0,0);
+ if(v==='home')list('Beauty & personal care',P,1);
+ else if(v==='cat'){var chips='<div class="ch"><button data-c="'+esc(a)+'" class="'+(b?'':'on')+'">All</button>'+CATS[a].b.map(function(x){return '<button data-c="'+esc(a)+'" data-b="'+esc(x)+'" class="'+(x===b?'on':'')+'">'+esc(x)+'</button>'}).join('')+'</div>';
+  list(a+(b?' · '+b:''),P.filter(function(x){return x.c===a&&(!b||x.b===b)}),1,chips)}
+ else if(v==='support')$('#main').innerHTML='<h1>Support</h1><div class="row"><span>Phone</span><a href="tel:09143748115">09143748115</a></div><div class="row"><span>Instagram</span><a href="https://instagram.com/amir.me.1229" target="_blank" rel="noopener">amir.me.1229</a></div><div class="row"><span>Telegram</span><a href="https://t.me/ballerinaamir" target="_blank" rel="noopener">@ballerinaamir</a></div>';
+ else if(v==='auth')$('#main').innerHTML='<h1>Product health &amp; authenticity</h1><p>Amayar points you to established shops. Before buying any product, check these:</p><ul><li>Batch number, production date and expiry date are printed on the package.</li><li>The label is complete, with a health-authority licence where required.</li><li>The seller is verified. A price far below market is a warning sign.</li><li>The seal is intact when the package arrives.</li></ul><p style="color:var(--mut)">Sample text, ready for you to expand.</p>';
+ else if(v==='profile')profile(false);
+ else if(v==='comments')showComments();
+ else if(v==='item'){var x=a;$('#main').innerHTML='<h1>'+esc(x.n)+'</h1><div class="grid">'+card(x)+'</div><h3>Similar products</h3><div class="grid">'+P.filter(function(y){return y.t===x.t&&y!==x}).slice(0,10).map(card).join('')+'</div>'}
+}
+async function profile(edit,msg){
+ var u=await api.getProfile();if(!u){showAuth();return}
+ var f=[['e','Email'],['n','Name'],['t','Phone']],h='<h1>My profile</h1>'+(msg?'<p class="ok">'+esc(msg)+'</p>':''),hp=u.p!=null;
+ if(!edit){
+  f.forEach(function(k){h+='<div class="row"><span>'+k[1]+'</span><b>'+esc(u[k[0]]||'—')+'</b></div>'});
+  h+='<div class="row"><span>Password</span><span class="pw"><b id="pv">'+(hp?'*'.repeat(u.p.length):'********')+'</b>'+(hp?'<button class="ib" id="ey" aria-label="Show password">👁</button>':'')+'</span></div><p><button class="btn" id="ed">Edit profile</button></p>';
+  $('#main').innerHTML=h;var sh=false;
+  if(hp)$('#ey').onclick=function(){sh=!sh;$('#pv').textContent=sh?u.p:'*'.repeat(u.p.length)};
+  $('#ed').onclick=function(){profile(true)}
+ }else{
+  h+='<form id="ef" style="max-width:380px"><div class="err" id="er"></div>';
+  f.forEach(function(k){h+='<label>'+k[1]+'</label><input id="f'+k[0]+'" value="'+esc(u[k[0]])+'"'+(k[0]==='e'?' type="email" required'+(api.multi?' disabled':''):'')+'>'});
+  h+='<label>Password'+(hp?'':' (leave empty to keep it)')+'</label><input id="fp" type="'+(hp?'text':'password')+'" value="'+esc(u.p)+'"'+(hp?' required':'')+'><button class="btn">Save</button> <button type="button" class="btn alt" id="cn">Cancel</button></form>';
+  $('#main').innerHTML=h;$('#cn').onclick=function(){profile(false)};
+  $('#ef').onsubmit=async function(ev){ev.preventDefault();
+   var nu={e:$('#fe').value.trim().toLowerCase(),n:$('#fn').value.trim(),t:$('#ft').value.trim(),p:$('#fp').value};
+   try{if(JSON.stringify(nu)!==JSON.stringify({e:u.e,n:u.n,t:u.t,p:u.p||''}))await api.saveProfile(nu,u);
+    profile(false,'Saved. The previous version is kept for 24 hours, then deleted.')}catch(x){$('#er').textContent=x.message||'Could not save.'}}
+ }
+}
+async function showComments(){
+ var r=await api.listComments(),h='<h1>Received feedback</h1>';
+ r.forEach(function(c){h+='<div class="row">'+esc(c.t)+'</div>'});
+ $('#main').innerHTML=r.length?h:h+'<p>No feedback yet.</p>'}
+
+// ---------- chrome ----------
+function closeAll(){document.querySelectorAll('.sub.o,.dd.o').forEach(function(e){e.classList.remove('o')});$('#sg').hidden=true}
+var nav='<div><button data-v="home">Home</button></div><div><button data-v="support">Support</button></div>';
+Object.keys(CATS).forEach(function(c){nav+='<div><button data-t="1">'+c+' ▾</button><div class="sub">'+CATS[c].b.map(function(b){return '<button data-c="'+esc(c)+'" data-b="'+esc(b)+'">'+esc(b)+'</button>'}).join('')+'<button data-c="'+c+'">All '+c+'</button></div></div>'});
+$('#nav').innerHTML=nav;
+function menu(){$('#dd').innerHTML='<button data-v="home">Home</button><button data-v="support">Support</button>'+Object.keys(CATS).map(function(c){return '<button data-c="'+c+'">'+c+'</button>'}).join('')+(api.owner()?'<button data-v="comments">Received feedback</button>':'')+'<hr><button id="lo">Sign out</button>'}
+document.addEventListener('click',function(ev){
+ var t=ev.target.closest('button');
+ if(!ev.target.closest('.sw'))$('#sg').hidden=true;
+ if(!t){closeAll();return}
+ if(t.id==='dots'){var o=$('#dd').classList.contains('o');closeAll();if(!o)$('#dd').classList.add('o');return}
+ if(t.dataset.t){var s=t.nextElementSibling,o2=s.classList.contains('o');closeAll();if(!o2)s.classList.add('o');return}
+ if(t.dataset.v)go(t.dataset.v);
+ else if(t.dataset.c)go('cat',t.dataset.c,t.dataset.b);
+ else if(t.id==='pf')go('profile');
+ else if(t.id==='lo'){api.logout();closeAll();showAuth()}
+});
+$('#q').oninput=function(){
+ var v=this.value.trim().toLowerCase(),sg=$('#sg');
+ if(!v){sg.hidden=true;return}
+ var r=P.filter(function(x){return (x.n+' '+x.c).toLowerCase().indexOf(v)>-1}).slice(0,6);
+ sg.innerHTML=r.length?r.map(function(x){return '<div data-k="'+P.indexOf(x)+'">'+esc(x.n)+'</div>'}).join(''):'<div>No results</div>';sg.hidden=false;
+ sg.querySelectorAll('[data-k]').forEach(function(d){d.onclick=function(){go('item',P[+d.dataset.k]);$('#q').value=''}})
+};
+// footer slots: 2 filled, 4 empty for later
+[['Product health & authenticity',function(){go('auth')}],['Tracking code',function(){window.open('https://tracking.post.ir/','_blank','noopener')}],['',0],['',0],['',0],['',0]].forEach(function(f){var b=document.createElement('button');b.textContent=f[0];if(f[1])b.onclick=f[1];$('#fs').appendChild(b)});
+$('#cs').onclick=async function(){var t=$('#cm').value.trim();if(!t)return;
+ try{await api.addComment(t);$('#cm').value='';$('#cok').textContent='Thank you, feedback sent.'}catch(e){$('#cok').textContent='Could not send feedback.'}};
+async function boot(){if(await api.session())start();else showAuth()}
+</script>
+
+<script>
+// GitHub Gist backend: all data (account, old data, feedback) is stored in ONE secret gist
+// in your own GitHub account. Each device needs your token once.
+(function(){
+function ld(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function sv(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var T=ld('amy_tok'),GID=ld('amy_gid'),D=null,FILE='amayar.json';
+async function gh(path,opt){opt=opt||{};opt.headers={'Authorization':'Bearer '+T,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+ var r=await fetch('https://api.github.com'+path,opt);
+ if(!r.ok)throw new Error(r.status===401?'GitHub rejected this token.':'GitHub error '+r.status);return r.json()}
+async function load(){
+ if(!GID){var l=await gh('/gists?per_page=100'),f=l.filter(function(g){return g.description==='amayar-data'})[0];
+  if(f)GID=f.id;else{var c=await gh('/gists',{method:'POST',body:JSON.stringify({description:'amayar-data',public:false,files:{'amayar.json':{content:JSON.stringify({user:null,old:null,comments:[]})}}})});GID=c.id}
+  sv('amy_gid',GID)}
+ var g=await gh('/gists/'+GID),f2=g.files[FILE];
+ D=JSON.parse(f2.truncated?await (await fetch(f2.raw_url)).text():f2.content);D.comments=D.comments||[]}
+async function save(){await gh('/gists/'+GID,{method:'PATCH',body:JSON.stringify({files:{'amayar.json':{content:JSON.stringify(D)}}})})}
+window.api={multi:false,
+ hasAccount:async function(){return !!D.user},
+ register:async function(e,p){await load();if(D.user)throw new Error('An account already exists. Sign in.');D.user={e:e,p:p,n:'',t:''};await save();sv('amy_in',1)},
+ login:async function(e,p){await load();if(D.user&&D.user.e===e&&D.user.p===p){sv('amy_in',1);return true}return false},
+ logout:function(){sv('amy_in',null)},
+ session:async function(){return !!(ld('amy_in')&&D.user)},
+ getProfile:async function(){await load();return D.user},
+ saveProfile:async function(nu,old){await load();D.old={d:{e:old.e,n:old.n,t:old.t},ts:Date.now()};D.user=nu;await save()},
+ purge:async function(){if(D.old&&Date.now()-D.old.ts>864e5){D.old=null;await save()}},
+ addComment:async function(t){await load();D.comments.push({t:t,d:new Date().toISOString()});await save()},
+ listComments:async function(){await load();return D.comments.slice().sort(function(a,b){return b.d>a.d?1:-1})},
+ owner:function(){return true}};
+function tokenScreen(msg){
+ $('#app').hidden=true;$('#auth').hidden=false;
+ $('#auth').innerHTML='<div class="box">'+logo('lg0',200)+'<h2>Connect GitHub</h2><p style="font-size:13px;text-align:left">Paste a GitHub token that only has the <b>gist</b> permission. It stays in this browser and is never put in the site files.</p><form id="tf"><input id="tk" type="password" placeholder="ghp_..." required autocomplete="off"><div class="err" id="er"></div><button class="btn" style="width:100%">Connect</button></form></div>';
+ $('#er').textContent=msg||'';
+ $('#tf').onsubmit=function(ev){ev.preventDefault();T=$('#tk').value.trim();sv('amy_tok',T);GID=null;sv('amy_gid',null);init()}}
+async function init(){if(!T){tokenScreen();return}
+ try{await load();boot()}catch(e){tokenScreen(e.message||'Could not reach GitHub.')}}
+init();
+})();
+</script>
+</body>
+</html>
